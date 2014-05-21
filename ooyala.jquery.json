@@ -1,0 +1,29 @@
+{
+	"name": "ooyala",
+	"title": "jQuery Ooyala",
+	"description": "An easy-to-use, extensible wrapper around Ooyala's Player Javascript API",
+	"keywords": [
+		"jquery",
+		"ooyala",
+		"plugins"
+	],
+	"version": "1.0.0",
+	"author": {
+		"name": "Refinery29, Inc.",
+		"email": "dev@refinery29.com",
+		"url": "https://github.com/refinery29"
+	},
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "http://mit-license.org/"
+		}
+	],
+	"bugs": "https://github.com/refinery29/jquery-ooyala/issues",
+	"homepage": "https://github.com/refinery29/jquery-ooyala",
+	"docs": "https://github.com/refinery29/jquery-ooyala#readme",
+	"download": "https://github.com/refinery29/jquery-ooyala/archive/master.zip",
+	"dependencies": {
+		"jquery": ">=1.4"
+	}
+}

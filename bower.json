@@ -20,6 +20,12 @@
     "demo/",
     "CONTRIBUTING.md",
     "Gruntfile.js",
+    "ooyala.jquery.json",
+    ".editorconfig",
+    ".jshintrc",
+    ".gitignore",
+    ".travis.yml",
+    "karma.conf.js",
     "ooyala.jquery.json"
   ],
   "devDependencies": {

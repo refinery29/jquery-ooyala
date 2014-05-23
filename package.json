@@ -3,6 +3,9 @@
   "description": "An easy-to-use, extensible jQuery wrapper around Ooyala's Javascript Player",
   "version": "1.0.0",
   "main": "dist/jquery.ooyala.js",
+  "scripts": {
+    "test": "grunt test"
+  },
   "devDependencies": {
     "grunt": "~0.4.5",
     "grunt-cli": "~0.1.13",
@@ -14,8 +17,8 @@
     "grunt-bower-task": "~0.3.4",
     "karma": "~0.12.16",
     "grunt-karma": "~0.8.3",
-    "karma-threshold-reporter": "~0.1.7",
     "karma-phantomjs-launcher": "~0.1.4",
-    "karma-chrome-launcher": "~0.1.3"
+    "karma-chrome-launcher": "~0.1.3",
+    "grunt-istanbul-coverage": "0.0.5"
   }
 }

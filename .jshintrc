@@ -3,14 +3,15 @@
 	"curly": true,
 	"eqeqeq": true,
 	"eqnull": true,
+	"es3": true,
 	"expr": true,
 	"immed": true,
 	"noarg": true,
+	"node": true,
 	"onevar": true,
 	"quotmark": "double",
 	"smarttabs": true,
 	"trailing": true,
 	"unused": true,
-	"node": true,
-	"es3": true
+	"validthis": true
 }

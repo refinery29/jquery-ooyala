@@ -5,7 +5,7 @@
 ## Installation
 
 ```sh
-$ bower install https://github.com/refinery29/jquery-ooyala#master
+$ bower install https://github.com/refinery29/jquery-ooyala.git#master
 ```
 
 ## License

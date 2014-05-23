@@ -74,7 +74,7 @@
       return $.ajax({
         dataType: "script",
         cache: true,  // prevent multiple calls for the same player
-        url: scriptUrl + "/?" + $.param(urlParams)
+        url: scriptUrl + "?" + $.param(urlParams)
       });
     },
 

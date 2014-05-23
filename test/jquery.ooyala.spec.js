@@ -45,7 +45,7 @@ describe( "jquery.ooyala", function() {
         expect( $.ajax ).toHaveBeenCalledWith( jasmine.objectContaining({
           dataType: "script",
           url: "//player.ooyala.com/v3/" + this.options.playerId +
-               "/?platform=html5-priority" + "&namespace=" +
+               "?platform=html5-priority" + "&namespace=" +
                this.$el.data( "ooyala" )._ooNamespace
         }));
       });

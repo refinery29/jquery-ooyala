@@ -67,6 +67,7 @@
         fetchPlayer.call( this );
       }
     },
+
     getPlayer: function() {
       var scriptUrl = "//player.ooyala.com/v3/" + this.settings.playerId,
           urlParams = this.settings.urlParams;
@@ -81,9 +82,22 @@
       return $.ajax({
         dataType: "script",
         cache: true,  // prevent multiple calls for the same player
-        url: scriptUrl + "/?" + $.param(urlParams)
+        url: scriptUrl + "?" + $.param(urlParams)
       });
-    }
+    },
+
+    loadContent: function( contentId ) {
+      this.settings.contentId = contentId;
+      this._player.setEmbedCode( contentId );
+    },
+
+    play: createProxy( "play" ),
+
+    pause: createProxy( "pause" ),
+
+    seek: createProxy( "seek" ),
+
+    skipAd: createProxy( "skipAd" )
   };
 
   // A really lightweight plugin wrapper around the constructor,
@@ -180,6 +194,15 @@
         .removeClass( "oo-player-loading" )
         .addClass( "oo-player-ready" )
         .trigger( "ooyala.ready", [ this._player, OO ] );
+  }
+
+  function createProxy( methodName ) {
+    return function() {
+      var player = this.$el.data( "ooyala" )._player,
+      args = [].slice.call(arguments);
+
+      player[ methodName ].apply(player, args);
+    };
   }
 
   function isObject( x ) {

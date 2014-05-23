@@ -327,5 +327,76 @@ describe( "jquery.ooyala", function() {
         });
       });
     });
+  }); // #getPlayer
+
+  describe( "proxied ooyala player methods", function() {
+    beforeEach(function() {
+      var OO;
+
+      this.initWorld();
+      this.deferred.resolve();
+      OO = this.OO;
+
+      this.ooPlayer = this.$oo.data( "ooyala" )._player;
+    });
+
+    describe( "#play", function() {
+      beforeEach(function() {
+        this.$el.data( "ooyala" ).play();
+      });
+
+      it( "calls play() on the underlying ooyala player", function() {
+        expect( this.ooPlayer.play ).toHaveBeenCalled();
+      });
+    });
+
+    describe( "#pause", function() {
+      beforeEach(function() {
+        this.$el.data( "ooyala" ).pause();
+      });
+
+      it( "calls pause() on the underlying ooyala player", function() {
+        expect( this.ooPlayer.pause ).toHaveBeenCalled();
+      });
+    });
+
+    describe( "#seek", function() {
+      beforeEach(function() {
+        this.$el.data( "ooyala" ).seek( 250 );
+      });
+
+      it( "calls seek() on the underlying ooyala player and passes the arguments through", function() {
+        expect( this.ooPlayer.seek ).toHaveBeenCalledWith( 250 );
+      });
+    });
+
+    describe( "#skipAd", function() {
+      beforeEach(function() {
+        this.$el.data( "ooyala" ).skipAd();
+      });
+
+      it( "calls skipAd() on the underlying ooyala player", function() {
+        expect( this.ooPlayer.skipAd ).toHaveBeenCalled();
+      });
+    });
   });
+
+  describe( "#loadContent", function() {
+    beforeEach(function() {
+      this.newContentId = "def456";
+      this.initWorld();
+      this.deferred.resolve();
+      this.ooPlayer = this.$el.data( "ooyala" )._player;
+      this.$el.data( "ooyala" ).loadContent( this.newContentId );
+    });
+
+    it( "sets the content id to the new id", function() {
+      expect( this.$el.data( "ooyala" ).settings.contentId ).toEqual( this.newContentId );
+    });
+
+    it( "calls setEmbedCode() using the new contentId", function() {
+      expect( this.ooPlayer.setEmbedCode ).toHaveBeenCalledWith( this.newContentId );
+    });
+  });
+
 });

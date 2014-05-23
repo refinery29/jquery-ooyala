@@ -43,7 +43,10 @@
         Player: jasmine.createSpyObj( "Player", [ "create" ] ),
         Events: {
           EVENT_ONE: "e1",
-          EVENT_TWO: "e2"
+          EVENT_TWO: "e2",
+          WILL_PLAY: "willplay",
+          PLAYING: "playing",
+          PLAYED: "played"
         },
         ready: function( fn ) { fn(); }
       };
@@ -58,7 +61,7 @@
   // Mock Ooyala Player, including fake Message Bus
   global.FakePlayer = function FakePlayer() {
     var events = $({}),
-    player = jasmine.createSpyObj( "FakePlayer", [ "play", "pause" ] ),
+    player = jasmine.createSpyObj( "FakePlayer", [ "play", "pause", "seek", "skipAd", "destroy", "setEmbedCode" ] ),
     mb = jasmine.createSpyObj( "FakePlayer message bus", [ "subscribe", "publish" ]);
 
     mb.subscribe.and.callFake(function( name, ns, cb ) {

@@ -18,6 +18,14 @@
   // Set the correct fixtures path for our code
   jasmine.getFixtures().fixturesPath = "/base/test/fixtures";
 
+  // Preload all fixtures here, since synchronous ajax does not
+  // work with 1.8+, and that's what jasmine-jquery uses in its
+  // loadFixtures() call.
+  jasmine.getFixtures().preload(
+    "auto_init_element.html",
+    "element_with_children.html"
+  );
+
   // Add lazy evaluation functionality and fake OO
   beforeEach(function() {
     this.let_ = function( name, getter ) {

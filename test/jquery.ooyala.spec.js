@@ -221,6 +221,83 @@ describe( "jquery.ooyala", function() {
     });
   }); // initialization
 
+  describe( "::initialize", function() {
+    beforeEach(function() {
+      loadFixtures( "auto_init_element.html" );
+      spyOn( $.fn, "ooyala" ).and.callThrough();
+      this.autoInitEl = document.querySelector( "#auto-init" );
+      this.dataAttrs = $( this.autoInitEl ).data();
+      $.data( document.body, "_jquery.ooyala" ).initialize();
+    });
+
+    it( "finds all DOM elements of class oo-player and intializes them using " +
+        "their data attrs as options", function() {
+      expect( $.fn.ooyala ).toHaveBeenCalledWith( this.dataAttrs );
+      expect( $( this.autoInitEl ).data( "ooyala" ) ).toEqual( jasmine.objectContaining({
+        _name: "ooyala"
+      }));
+    });
+  });
+
+  describe( "auto-initialization", function() {
+    beforeEach(function() {
+      loadFixtures( "auto_init_element.html" );
+      $.ajax.and.callThrough();
+      this.$ajax = $.ajax;
+
+      $.ajax = jasmine.createSpy( "ajax" ).and.callFake(function( opts ) {
+        var deferred = new $.Deferred(), $ajax = this.$ajax;
+
+        if ( /jquery\.ooyala\.js/.test( opts.url ) ) {
+          $ajax( opts ).then(function() {
+            deferred.resolve();
+          }.bind( this ) );
+        }
+
+        return deferred.promise();
+      }.bind( this ) );
+
+      this.getScript = function() {
+        return $.ajax( { url: "/base/src/jquery.ooyala.js" } );
+      };
+
+    });
+
+    afterEach(function() {
+      $.ajax = this.$ajax;
+    });
+
+    describe( "when the jquery ooyala plugin script is loaded", function() {
+      describe( "and the data-auto-init attr on the plugin's script tag is not falsy", function() {
+        beforeEach(function( done ) {
+          this.getScript().then( done );
+        });
+
+        it( "automagically calls $.fn.ooyala on all .oo-player", function() {
+          expect( $( "#auto-init" ).data( "ooyala" ) ).toEqual(jasmine.objectContaining({
+            _name: "ooyala"
+          }));
+        });
+      });
+
+      describe( "but the data-auto-init attr on the plugin's script tag is falsy", function() {
+        beforeEach(function( done ) {
+          this.$script = $( "script[src*='jquery.ooyala.js']" ).attr( "data-auto-init", false );
+          this.getScript().then( done );
+        });
+
+        afterEach(function() {
+          this.$script.removeAttr( "data-auto-init" );
+        });
+
+        it( "does not instantiate any plugins", function() {
+          expect( $( "#auto-init" ).data( "ooyala" ) ).toBeUndefined();
+        });
+      });
+    });
+
+  });
+
   describe( "#init", function() {
     describe( "when settings.lazyLoadOn is a string representing an event", function() {
       beforeEach(function() {
@@ -398,5 +475,4 @@ describe( "jquery.ooyala", function() {
       expect( this.ooPlayer.setEmbedCode ).toHaveBeenCalledWith( this.newContentId );
     });
   });
-
 });

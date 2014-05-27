@@ -51,11 +51,18 @@
       this.OO = window[ namespace ] = {
         Player: jasmine.createSpyObj( "Player", [ "create" ] ),
         Events: {
+          ERROR: "error",
           EVENT_ONE: "e1",
           EVENT_TWO: "e2",
-          WILL_PLAY: "willplay",
+          PAUSED: "paused",
+          PLAYBACK_READY: "playbackready",
+          PLAYED: "played",
           PLAYING: "playing",
-          PLAYED: "played"
+          PLAY_FAILED: "playfailed",
+          STREAM_PAUSED: "streampaused",
+          STREAM_PLAYING: "streamplaying",
+          STREAM_PLAY_FAILED: "streamplayfailed",
+          WILL_PLAY: "willplay"
         },
         ready: function( fn ) { fn(); }
       };
@@ -80,8 +87,10 @@
       });
     });
 
-    mb.publish.and.callFake(function( name/*, ns, ...args */ ) {
-      var args = [].slice.call( arguments, 2 );
+    mb.publish.and.callFake(function( name/*, ...args */ ) {
+      var args = [].slice.call( arguments, 1 );
+      // make it behave like the ooyala message bus
+      args.unshift( name );
       events.trigger( name, args );
     });
 

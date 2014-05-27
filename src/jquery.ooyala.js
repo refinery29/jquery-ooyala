@@ -21,6 +21,16 @@
         playerParams: {},
         playerPlacement: "append",
         urlParams: {}
+      },
+      cssEventHooks = {
+        ERROR: "oo-player-error",
+        PAUSED: "oo-player-paused",
+        PLAYBACK_READY: "oo-player-ready",
+        PLAYING: "oo-player-playing",
+        PLAY_FAILED: "oo-player-error",
+        STREAM_PAUSED: "oo-player-paused",
+        STREAM_PLAYING: "oo-player-playing",
+        STREAM_PLAY_FAILED: "oo-player-error"
       };
 
   // The actual plugin constructor
@@ -196,28 +206,36 @@
 
   function initPlayer( player, OO ) {
     var self = this,
-        proxyEventHandler,
-        evtKey;
+        proxyEventHandler;
 
     proxyEventHandler = function( evtKey ) {
       return function() {
         var args = [].slice.call(arguments);
+        // Get rid of the name that gets sent as the first argument to each subscription
+        args.shift();
         self.$el.trigger( "ooyala.event." + evtKey, args );
       };
     };
 
-    for ( evtKey in OO.Events ) {
-      // Not even going to worry about covering this if statement
-      /* istanbul ignore next */
-      if ( Object.prototype.hasOwnProperty.call( OO.Events, evtKey ) ) {
-        player.mb.subscribe( OO.Events[ evtKey ], "oo-player", proxyEventHandler( evtKey ) );
+    objEach( OO.Events, function( evt, evtKey ) {
+      if ( typeof cssEventHooks[ evtKey ] === "string" ) {
+        player.mb.subscribe( evt, "oo-player", function() {
+          removeAllStateClasses.call( self );
+          self.$el.addClass( cssEventHooks[ evtKey ] );
+        });
       }
-    }
+
+      player.mb.subscribe( evt, "oo-player", proxyEventHandler( evtKey ) );
+    });
+
     this._player = player;
-    this.$el
-        .removeClass( "oo-player-loading" )
-        .addClass( "oo-player-ready" )
-        .trigger( "ooyala.ready", [ this._player, OO ] );
+    this.$el.trigger( "ooyala.ready", [ this._player, OO ] );
+  }
+
+  function removeAllStateClasses() {
+    this.$el.removeClass(function( idx, classNames ) {
+      return ( classNames.match( /\boo-player-\S+/g ) || [] ).join( " " );
+    });
   }
 
   function bindPlayerTrigger() {
@@ -251,5 +269,17 @@
 
   function isObject( x ) {
     return typeof x === "object" && x !== null;
+  }
+
+  function objEach( obj, iterator, context ) {
+    var hasOwn = Object.prototype.hasOwnProperty, key;
+
+    for ( key in obj ) {
+      // Not even going to worry about covering this if statement
+      /* istanbul ignore next */
+      if ( hasOwn.call( obj, key ) ) {
+        iterator.call( context, obj[ key ], key, obj );
+      }
+    }
   }
 })( jQuery, window, document );

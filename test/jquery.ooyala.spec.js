@@ -176,8 +176,8 @@ describe( "jquery.ooyala", function() {
             .on( "ooyala.event.EVENT_ONE", this.e1Spy )
             .on( "ooyala.event.EVENT_TWO", this.e2Spy );
 
-        player.mb.publish( this.OO.Events.EVENT_ONE, "", "foo" );
-        player.mb.publish( this.OO.Events.EVENT_TWO, "", "bar", "baz" );
+        player.mb.publish( this.OO.Events.EVENT_ONE, "foo" );
+        player.mb.publish( this.OO.Events.EVENT_TWO, "bar", "baz" );
 
         expect( this.e1Spy ).toHaveBeenCalledWith( jasmine.any( Object ), "foo" );
         expect( this.e2Spy ).toHaveBeenCalledWith( jasmine.any( Object ), "bar", "baz" );
@@ -186,14 +186,6 @@ describe( "jquery.ooyala", function() {
       it( "triggers ooyala.ready and passes it (player, OO)", function() {
         var player = this.$el.data( "ooyala" )._player;
         expect( "ooyala.ready" ).toHaveBeenTriggeredOnAndWith( this.$el, [ player, this.OO ] );
-      });
-
-      it( "adds an oo-player-ready class to the element", function() {
-        expect( this.$el ).toHaveClass( "oo-player-ready" );
-      });
-
-      it( "removes the oo-player-loading class from the element", function() {
-        expect( this.$el ).not.toHaveClass( "oo-player-loading" );
       });
     });
 
@@ -416,6 +408,50 @@ describe( "jquery.ooyala", function() {
       });
     });
 
+  });
+
+  describe( "player message bus events -> css hooks", function() {
+    beforeEach(function() {
+      this.initWorld();
+      this.deferred.resolve();
+      this.player = this.$el.data( "ooyala" )._player;
+    });
+
+    shouldAddClassForEvent( "ERROR", "oo-player-error" );
+    shouldAddClassForEvent( "PAUSED", "oo-player-paused" );
+    shouldAddClassForEvent( "PLAYBACK_READY", "oo-player-ready" );
+    shouldAddClassForEvent( "PLAYING", "oo-player-playing" );
+    shouldAddClassForEvent( "PLAY_FAILED", "oo-player-error" );
+    shouldAddClassForEvent( "STREAM_PAUSED", "oo-player-paused" );
+    shouldAddClassForEvent( "STREAM_PLAYING", "oo-player-playing" );
+    shouldAddClassForEvent( "STREAM_PLAY_FAILED", "oo-player-error" );
+
+    describe( "even when there are no state classes on the element", function() {
+      beforeEach(function() {
+        this.$el.removeClass( "oo-player-loading" );
+      });
+
+      shouldAddClassForEvent( "ERROR", "oo-player-error" );
+      shouldAddClassForEvent( "PAUSED", "oo-player-paused" );
+      shouldAddClassForEvent( "PLAYBACK_READY", "oo-player-ready" );
+      shouldAddClassForEvent( "PLAYING", "oo-player-playing" );
+      shouldAddClassForEvent( "PLAY_FAILED", "oo-player-error" );
+      shouldAddClassForEvent( "STREAM_PAUSED", "oo-player-paused" );
+      shouldAddClassForEvent( "STREAM_PLAYING", "oo-player-playing" );
+      shouldAddClassForEvent( "STREAM_PLAY_FAILED", "oo-player-error" );
+    });
+
+    function shouldAddClassForEvent( evtName, className ) {
+      describe( "when " + evtName + " is triggered from the ooyala player", function() {
+        beforeEach(function() {
+          this.player.mb.publish( this.OO.Events[evtName] );
+        });
+
+        it( "adds an " + className + " class to the element", function() {
+          expect( this.$el ).toHaveClass( className );
+        });
+      });
+    }
   });
 
   describe( "#init", function() {

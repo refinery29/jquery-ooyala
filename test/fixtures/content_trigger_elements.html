@@ -1,0 +1,14 @@
+<div id="player" class="oo-player"
+  data-content-id="video1"
+  data-player-id="567"
+  ></div>
+
+<div id="triggers">
+  <p id="vid1" data-oo-player-trigger='{ "domId": "player", "contentId": "video1" }'>Play Video 1</p>
+  <p id="vid1-seek" data-oo-player-trigger='{ "domId": "player", "contentId": "video1", "seek": "60" }'>Play Video 1 at 1 minute</p>
+  <p id="vid2" data-oo-player-trigger='{ "domId": "player", "contentId": "video2" }'>Play Video 2</p>
+  <p id="vid3-seek" data-oo-player-trigger='{ "domId": "player", "contentId": "video3", "seek": "5" }'>Play Video 3 at 5s</p>
+  <p id="vid4-event" data-oo-player-trigger='{ "domId": "player", "contentId": "video4", "event": "mouseover" }'>Mouse Over for Video 4</p>
+  <p id="no-content-id" data-oo-player-trigger='{ "domId": "player" }'>No Content Id</p>
+  <p id="no-dom-id" data-oo-player-trigger='{ "contentId": "789" }'>No DOM Id</p>
+</div>

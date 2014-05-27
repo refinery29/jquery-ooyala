@@ -222,20 +222,140 @@ describe( "jquery.ooyala", function() {
   }); // initialization
 
   describe( "::initialize", function() {
-    beforeEach(function() {
-      loadFixtures( "auto_init_element.html" );
-      spyOn( $.fn, "ooyala" ).and.callThrough();
-      this.autoInitEl = document.querySelector( "#auto-init" );
-      this.dataAttrs = $( this.autoInitEl ).data();
-      $.data( document.body, "_jquery.ooyala" ).initialize();
+    describe( "when there are DOM elements with class oo-player on the page", function() {
+      beforeEach(function() {
+        loadFixtures( "auto_init_element.html" );
+        spyOn( $.fn, "ooyala" ).and.callThrough();
+        this.autoInitEl = document.querySelector( "#auto-init" );
+        this.dataAttrs = $( this.autoInitEl ).data();
+
+        $( document ).trigger( "jquery.ooyala.initialize" );
+      });
+
+      it( "intializes the plugin with their data attrs as options", function() {
+        expect( $.fn.ooyala ).toHaveBeenCalledWith( this.dataAttrs );
+        expect( $( this.autoInitEl ).data( "ooyala" ) ).toEqual( jasmine.objectContaining({
+          _name: "ooyala"
+        }));
+      });
     });
 
-    it( "finds all DOM elements of class oo-player and intializes them using " +
-        "their data attrs as options", function() {
-      expect( $.fn.ooyala ).toHaveBeenCalledWith( this.dataAttrs );
-      expect( $( this.autoInitEl ).data( "ooyala" ) ).toEqual( jasmine.objectContaining({
-        _name: "ooyala"
-      }));
+    describe( "Auto swapping videos via data-oo-player-trigger params", function() {
+      beforeEach(function() {
+        var ooyala;
+
+        loadFixtures( "content_trigger_elements.html" );
+        $( document ).trigger( "jquery.ooyala.initialize" );
+
+        ooyala = $( "#player" ).data( "ooyala" );
+
+        this.fauxO( ooyala._ooNamespace );
+        this.deferred.resolve();
+      });
+
+      describe( "when an element has data-oo-player-trigger", function() {
+        beforeEach(function() {
+          this.ooyala = $( "#player" ).data( "ooyala" );
+          this.$triggers = $( "#triggers" );
+
+          spyOn( this.ooyala, "loadContent" );
+          spyOn( this.ooyala, "seek" );
+
+          this.triggerClickOnSelector = triggerClickOnSelector;
+          this.triggerEvent = triggerEvent;
+        });
+
+        describe( "when contentId and domId are provided", function() {
+          describe( "and no other parameters are provided", function() {
+            beforeEach(function() {
+              this.triggerClickOnSelector( "#vid2" );
+            });
+
+            shouldCallLoadContent();
+          });
+
+          describe( "and a DOM event specified to execute the trigger is dispatched", function() {
+            beforeEach(function() {
+              this.triggerEvent( "mouseover" ).onSelector( "#vid4-event" );
+            });
+
+            shouldCallLoadContent();
+          });
+
+          describe( "and contentId matches the player contentId", function() {
+            describe( "when seek is set", function() {
+              beforeEach(function() {
+                this.triggerClickOnSelector( "#vid1-seek" );
+              });
+
+              shouldNotCallLoadContent();
+
+              it( "calls seek( <seek> )", function() {
+                expect( this.ooyala.seek ).toHaveBeenCalledWith( this.params.seek );
+              });
+            });
+
+            describe( "when seek is not set", function() {
+              beforeEach(function() {
+                this.triggerClickOnSelector( "#vid1" );
+              });
+
+              shouldNotCallLoadContent();
+
+              it( "calls seek( 0 )", function() {
+                expect( this.ooyala.seek ).toHaveBeenCalledWith( 0 );
+              });
+            });
+          });
+        });
+
+
+        describe( "when there is no content id", function() {
+          shouldDoNothingWithSelector( "#no-content-id" );
+        });
+
+        describe( "when there is no DOM id", function() {
+          shouldDoNothingWithSelector( "#no-dom-id" );
+        });
+
+        function shouldDoNothingWithSelector( sel ) {
+          beforeEach(function() {
+            this.triggerClickOnSelector( sel );
+          });
+
+          shouldNotCallLoadContent();
+
+          it( "does not update the play position", function() {
+            expect( this.ooyala.seek ).not.toHaveBeenCalled();
+          });
+        }
+
+        function shouldNotCallLoadContent() {
+          it( "does not change the content", function() {
+            expect( this.ooyala.loadContent ).not.toHaveBeenCalled();
+          });
+        }
+
+        function shouldCallLoadContent() {
+          it( "calls loadContent( <contentId> ) on the player plugin attached to the element with id <domId>", function() {
+            expect( this.ooyala.loadContent ).toHaveBeenCalledWith( this.params.contentId );
+          });
+        }
+
+        function triggerClickOnSelector( sel ) {
+          triggerEvent.call( this, "click" ).onSelector( sel );
+        }
+
+        function triggerEvent( evt ) {
+          return {
+            onSelector: function( sel ) {
+              this.$sel = this.$triggers.find( sel );
+              this.params = this.$sel.data().ooPlayerTrigger;
+              this.$sel.trigger( evt );
+            }.bind(this)
+          };
+        }
+      });
     });
   });
 

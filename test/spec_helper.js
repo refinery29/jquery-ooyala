@@ -23,7 +23,8 @@
   // loadFixtures() call.
   jasmine.getFixtures().preload(
     "auto_init_element.html",
-    "element_with_children.html"
+    "element_with_children.html",
+    "content_trigger_elements.html"
   );
 
   // Add lazy evaluation functionality and fake OO

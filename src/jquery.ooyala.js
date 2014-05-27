@@ -93,13 +93,22 @@
   };
 
   OoyalaWrapper.initialize = function() {
+    // Find all elements with class oo-player and initializes the plugin on
+    // each of those elements.
     $( ".oo-player" ).each(function() {
       var $this = $( this ),
           options = $this.data();
 
       $this.ooyala( options );
     });
+
+    // Find all triggers for a certain player, and bind triggering logic
+    // for each.
+    $( "[data-oo-player-trigger]" ).each( bindPlayerTrigger );
   };
+
+  // Allow initialize() to be triggered via an event on the document.
+  $( document ).on( "jquery.ooyala.initialize", OoyalaWrapper.initialize );
 
   // When the script loads, and the data-auto-init attr on the tag is not
   // set to a falsy value, we automagically call $( el ).ooyala(), where
@@ -114,11 +123,6 @@
       OoyalaWrapper.initialize();
     }
   });
-
-  // Expose the OoyalaWrapper constructor as a data param on the document body.
-  // Prefix with "_" as in most cases there are better ways to accomplish a
-  // task than by directly using this constructor.
-  $.data( document.body, "_jquery.ooyala", OoyalaWrapper );
 
   // A really lightweight plugin wrapper around the constructor,
   // preventing against multiple instantiations
@@ -214,6 +218,26 @@
         .removeClass( "oo-player-loading" )
         .addClass( "oo-player-ready" )
         .trigger( "ooyala.ready", [ this._player, OO ] );
+  }
+
+  function bindPlayerTrigger() {
+    var $this = $( this ),
+    defaults = { event: "click", seek: 0 },
+    options = $.extend( defaults, $this.data().ooPlayerTrigger ),
+    ooPlayer;
+
+    if ( options.domId && options.contentId ) {
+      ooPlayer = $( document.getElementById(options.domId) ).data( "ooyala" );
+
+      $this.on( options.event, function() {
+
+        if ( options.contentId === ooPlayer.settings.contentId ) {
+          ooPlayer.seek( options.seek );
+        } else {
+          ooPlayer.loadContent( options.contentId );
+        }
+      });
+    }
   }
 
   function createProxy( methodName ) {

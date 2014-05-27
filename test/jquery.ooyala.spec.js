@@ -169,15 +169,15 @@ describe( "jquery.ooyala", function() {
         this.deferred.resolve();
       });
 
-      it( "proxies all OO.Events to the element", function() {
+      it( "proxies all OO.EVENTS to the element", function() {
         var player = this.$oo.data( "ooyala" )._player;
 
         this.$oo
             .on( "ooyala.event.EVENT_ONE", this.e1Spy )
             .on( "ooyala.event.EVENT_TWO", this.e2Spy );
 
-        player.mb.publish( this.OO.Events.EVENT_ONE, "foo" );
-        player.mb.publish( this.OO.Events.EVENT_TWO, "bar", "baz" );
+        player.mb.publish( this.OO.EVENTS.EVENT_ONE, "foo" );
+        player.mb.publish( this.OO.EVENTS.EVENT_TWO, "bar", "baz" );
 
         expect( this.e1Spy ).toHaveBeenCalledWith( jasmine.any( Object ), "foo" );
         expect( this.e2Spy ).toHaveBeenCalledWith( jasmine.any( Object ), "bar", "baz" );
@@ -444,7 +444,7 @@ describe( "jquery.ooyala", function() {
     function shouldAddClassForEvent( evtName, className ) {
       describe( "when " + evtName + " is triggered from the ooyala player", function() {
         beforeEach(function() {
-          this.player.mb.publish( this.OO.Events[evtName] );
+          this.player.mb.publish( this.OO.EVENTS[evtName] );
         });
 
         it( "adds an " + className + " class to the element", function() {

@@ -50,7 +50,7 @@
 
       this.OO = window[ namespace ] = {
         Player: jasmine.createSpyObj( "Player", [ "create" ] ),
-        Events: {
+        EVENTS: {
           ERROR: "error",
           EVENT_ONE: "e1",
           EVENT_TWO: "e2",

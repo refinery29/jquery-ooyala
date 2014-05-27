@@ -217,7 +217,7 @@
       };
     };
 
-    objEach( OO.Events, function( evt, evtKey ) {
+    objEach( OO.EVENTS, function( evt, evtKey ) {
       if ( typeof cssEventHooks[ evtKey ] === "string" ) {
         player.mb.subscribe( evt, "oo-player", function() {
           removeAllStateClasses.call( self );

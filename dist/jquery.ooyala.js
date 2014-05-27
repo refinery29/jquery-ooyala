@@ -100,6 +100,34 @@
     skipAd: createProxy( "skipAd" )
   };
 
+  OoyalaWrapper.initialize = function() {
+    $( ".oo-player" ).each(function() {
+      var $this = $( this ),
+          options = $this.data();
+
+      $this.ooyala( options );
+    });
+  };
+
+  // When the script loads, and the data-auto-init attr on the tag is not
+  // set to a falsy value, we automagically call $( el ).ooyala(), where
+  // el represents the NodeList of all elements with class "oo-player".
+  $(function() {
+    var $pluginTag = $( "script[src*='jquery." + pluginName + "']" );
+
+    // Initial check for the attribute is done here because we want to
+    // auto-initialize by default if data-auto-init is omitted completely.
+    if ( !$pluginTag.is( "[data-auto-init]" ) ||
+         $pluginTag.data( "autoInit" ) ) {
+      OoyalaWrapper.initialize();
+    }
+  });
+
+  // Expose the OoyalaWrapper constructor as a data param on the document body.
+  // Prefix with "_" as in most cases there are better ways to accomplish a
+  // task than by directly using this constructor.
+  $.data( document.body, "_jquery.ooyala", OoyalaWrapper );
+
   // A really lightweight plugin wrapper around the constructor,
   // preventing against multiple instantiations
   $.fn[ pluginName ] = function ( options ) {

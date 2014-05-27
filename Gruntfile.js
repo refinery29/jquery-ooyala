@@ -1,6 +1,3 @@
-var fs = require('fs'),
-    path = require('path');
-
 module.exports = function(grunt) {
 
   grunt.initConfig({
@@ -92,7 +89,7 @@ module.exports = function(grunt) {
           lines: 100,
           functions: 100
         },
-        dir: 'coverage',
+        dir: "coverage",
         root: __dirname
       }
     }
@@ -105,6 +102,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-karma");
   grunt.loadNpmTasks("grunt-istanbul-coverage");
 
-  grunt.registerTask("test", ["jshint", "karma:ci", "coverage"]);
+  grunt.registerTask("test", ["bower:install", "jshint", "karma:ci", "coverage"]);
   grunt.registerTask("dist", ["test", "concat", "uglify"]);
 };

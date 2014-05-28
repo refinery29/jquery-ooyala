@@ -92,6 +92,15 @@ module.exports = function(grunt) {
         dir: "coverage",
         root: __dirname
       }
+    },
+
+    docco: {
+      generate: {
+        src: ["src/jquery.ooyala.js"],
+        options: {
+          output: "doc/"
+        }
+      }
     }
   });
 
@@ -101,7 +110,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-bower-task");
   grunt.loadNpmTasks("grunt-karma");
   grunt.loadNpmTasks("grunt-istanbul-coverage");
+  grunt.loadNpmTasks("grunt-docco");
 
   grunt.registerTask("test", ["bower:install", "jshint", "karma:ci", "coverage"]);
-  grunt.registerTask("dist", ["test", "concat", "uglify"]);
+  grunt.registerTask("dist", ["test", "concat", "uglify", "docco"]);
 };

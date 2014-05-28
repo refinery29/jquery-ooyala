@@ -12,7 +12,7 @@
 // [Ooyala's V3 Javascript Player](http://support.ooyala.com/developers/documentation/concepts/player_v3_api_intro.html).
 // It aims to be easy to use, extensible, versatile, and enterprise-grade.
 // It is licensed under the [MIT License](http://mit-license.org), and built by your friends on the
-// [Refinery29 Mobile Web Team](r29mobile.tumblr.com)
+// [Refinery29 Mobile Web Team](http://r29mobile.tumblr.com)
 //
 // Documentation, demos, and usage can be found on [GitHub](https://github.com/refinery29/jquery-ooyala)
 //

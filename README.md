@@ -1,18 +1,19 @@
 jquery-ooyala
 =============
+[![Build Status](https://travis-ci.org/refinery29/jquery-ooyala.svg?branch=master)](https://travis-ci.org/refinery29/jquery-ooyala)
 
 jQuery-Ooyala provides a dead-simple interface for creating and working with [Ooyala's V3 Javascript Player](http://support.ooyala.com/developers/documentation/concepts/player_v3_api_intro.html). It is:
 
-#### Easy to use 
+#### Easy to use
 * Requires **no javascript out of the box**: all behaviour and initialization can be configured via data attributes on HTML elements
 * Takes care of _all_ tasks needed to embed content from Ooyala onto a page
 
 #### Extensible
-* Support for multiple players on pages 
+* Support for multiple players on pages
 * Support for lazy loading of players on specified events
 * Plethora of css hooks to use to style the player given its state
 
-#### Versatile 
+#### Versatile
 * Robust javascript API for high and low-level interfaces to the Ooyala player
 * Mechanisms for accessing the global `OO` object for a player, as well as the underlying Ooyala player itself
 * Chainable, jquery-like interface for subscribing to player events
@@ -74,7 +75,7 @@ $ npm install jquery-ooyala
 In your html, add an element with class "oo-player", as well as a script tag pointing to jquery and jquery-ooyala
 
 ```html
-<div class="oo-player" 
+<div class="oo-player"
      data-player-id="your_player_id"
      data-content-id="your_content_id"></div>
 <!-- .... -->
@@ -118,7 +119,7 @@ Often times, especially on mobile, you'll want to wait until a user interacts wi
     >Tap me to load a video!</div>
 ```
 
-Now the ooyala player will not be loaded until a `touchend` event is triggered on that element. 
+Now the ooyala player will not be loaded until a `touchend` event is triggered on that element.
 
 You can achieve the same result using javascript:
 
@@ -171,7 +172,7 @@ jquery-ooyala provides the following css hooks for styling:
 * `oo-player` is added to every element which the plugin is called on
 * `oo-player-loading` is applied during initialization (before the player/content has loaded) as well as when different videos are being loaded
 * `oo-player-ready` is applied when content has been loaded and is ready to be played
-* `oo-player-playing` is applied when the player is current playing content 
+* `oo-player-playing` is applied when the player is current playing content
 * `oo-player-paused` is applied when currently playing content is paused
 * `oo-player-error` is applied if there is an error loading the player script, or if there is an error when loading content for a player
 
@@ -187,7 +188,7 @@ jquery-ooyala provides an interface to subscribe to Player events in the same wa
 $( "#your-ooyala-player-element" ).ooyala( { /* ... */ })
                                   .on( "ooyala.event.WILL_PLAY_ADS ooyala.event.WILL_PLAY_SINGLE_AD", showAdBanner )
                                   .on( "ooyala.event.WILL_RESUME_MAIN_VIDEO", hideAdBanner )
-                                  .on( "ooyala.event.FULLSCREEN_CHANGED", function( evt, isFullscreen ) { 
+                                  .on( "ooyala.event.FULLSCREEN_CHANGED", function( evt, isFullscreen ) {
                                     console.debug( ( isFullscreen ? "Fullscreen mode on" : "Fullscreen mode off" ) );
                                   });
 ```
@@ -255,7 +256,7 @@ If you need to provide any [query paramaters](http://support.ooyala.com/develope
 ```
 
 ```javascript
-$( "#your-ooyala-player-element" ).ooyala({ 
+$( "#your-ooyala-player-element" ).ooyala({
     playerId: "your_player_id",
     contentId: "your_content_id",
     urlParams: { platform: "html5-fallback" },
@@ -265,7 +266,7 @@ $( "#your-ooyala-player-element" ).ooyala({
 
 Note that for url params, `namespace` will be ignored, as we control that internally. Additionally, `onCreate` is ignored in player params. See the next section for info on how to hook into `onCreate`.
 
-### Directly accessing the Ooyala global object and player 
+### Directly accessing the Ooyala global object and player
 
 When the ooyala script has completely loaded and the player has been created, the element containing the ooyala plugin will trigger an `"ooyala.ready"` event on itself, and pass along both the instantiated player, as well as that player's global `OO` object. You can hook into this event to perform low-level interactions with the player and the object.
 

@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>jQuery-ooyala</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="jquery-ooyala">jQuery-ooyala</h1>
+<p>jQuery-Ooyala provides a dead-simple interface for creating and working with
+<a href="http://support.ooyala.com/developers/documentation/concepts/player_v3_api_intro.html">Ooyala’s V3 Javascript Player</a>.
+It aims to be easy to use, extensible, versatile, and enterprise-grade.
+It is licensed under the <a href="http://mit-license.org">MIT License</a>, and built by your friends on the
+<a href="r29mobile.tumblr.com">Refinery29 Mobile Web Team</a></p>
+<p>Documentation, demos, and usage can be found on <a href="https://github.com/refinery29/jquery-ooyala">GitHub</a></p>
+<p>For bugs/feature requests, please <a href="https://github.com/refinery29/jquery-ooyala/issues/new">create an issue</a>, and</p>
+<p>And of course, <strong>please</strong> <a href="https://github.com/refinery29/jquery-ooyala/blob/master/CONTRIBUTING.md">contribute</a>! :)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>;(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">( $, window, document, undefined )</span> {</span>
+<span class="hljs-pi">  "use strict"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>undefined is used here as the undefined global variable in ECMAScript 3 is
+mutable (ie. it can be changed by someone else). undefined isn’t really being
+passed in so we can ensure the value of it is truly undefined. In ES5, undefined
+can no longer be modified.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>window and document are passed through as local variable rather than global
+as this (slightly) quickens the resolution process and can be more efficiently
+minified (especially when both are regularly referenced in your plugin).</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+  <span class="hljs-keyword">var</span> pluginName = <span class="hljs-string">"ooyala"</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Save a uId in a closure we can use to properly namespace Ooyala objects</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      uId = <span class="hljs-number">0</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Create the defaults once</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      defaults = {
+        contentId: <span class="hljs-literal">undefined</span>,
+        favorHtml5: <span class="hljs-literal">true</span>,
+        lazyLoadOn: <span class="hljs-literal">undefined</span>,
+        playerId: <span class="hljs-literal">undefined</span>,
+        playerParams: {},
+        playerPlacement: <span class="hljs-string">"append"</span>,
+        urlParams: {}
+      },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Map of OO.EVENTS property names to the respective css classes that should
+be applied to a player when that event is triggered from its underlying
+player’s message bus.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      cssEventHooks = {
+        ERROR: <span class="hljs-string">"oo-player-error"</span>,
+        PAUSED: <span class="hljs-string">"oo-player-paused"</span>,
+        PLAYBACK_READY: <span class="hljs-string">"oo-player-ready"</span>,
+        PLAYING: <span class="hljs-string">"oo-player-playing"</span>,
+        PLAY_FAILED: <span class="hljs-string">"oo-player-error"</span>,
+        STREAM_PAUSED: <span class="hljs-string">"oo-player-paused"</span>,
+        STREAM_PLAYING: <span class="hljs-string">"oo-player-playing"</span>,
+        STREAM_PLAY_FAILED: <span class="hljs-string">"oo-player-error"</span>
+      };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>The actual plugin constructor. Wraps all logic around fetching Ooyala’s javascript,
+creating a player with given content, ensuring Ooyala is completely loaded, etc.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">OoyalaWrapper</span> <span class="hljs-params">( element, options )</span> {</span>
+    <span class="hljs-keyword">this</span>.el = element;
+    <span class="hljs-keyword">this</span>.$el = $(element);
+    <span class="hljs-keyword">this</span>.settings = $.extend( <span class="hljs-literal">true</span>, {}, defaults, options );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>This will be used to assign this particular player’s OO object to the global namespace</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>._ooNamespace = <span class="hljs-string">"OO"</span> + uId++;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Save a reference to the defaults used with this player</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>._defaults = defaults;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Used to identify an object as an instance of the plugin. Cleaner in our opinion than
+<code>instanceof</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>._name = pluginName;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Reference to the underlying ooyala player. Directly referencing this is discouraged,
+but if absolutely needed is possible</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>._player = <span class="hljs-literal">null</span>;
+
+    <span class="hljs-keyword">this</span>.init();
+  }
+
+  OoyalaWrapper.prototype = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h2 id="init-">init()</h2>
+<p>The main initialization function. Usually this is only called once, when the plugin is
+first instantiated on an element.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    init: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+      <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Ooyala’s v3 Player requires both a player id and a content id to function properly.
+If we’re missing any of these properties, we won’t be able to do anything, so let’s
+error out and immediately inform the cosumer that she has made a mistake by omitting
+these properties.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> ( !<span class="hljs-keyword">this</span>.settings.playerId ) {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>( <span class="hljs-string">"You must provide a playerId to $.fn.ooyala()"</span> );
+      }
+
+      <span class="hljs-keyword">if</span> ( !<span class="hljs-keyword">this</span>.settings.contentId ) {
+        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>( <span class="hljs-string">"You must provide a contentId to $.fn.ooyala()"</span> );
+      }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>Take care of applying the correct classes to the element and properly setting up the
+DOM structure needed for Ooyala to function correctly.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      initDOM.call( <span class="hljs-keyword">this</span> );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>When lazyLoadOn is specified, we wait for that event to occur before we actually
+make the call to retrieve the Ooyala player.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> <span class="hljs-keyword">this</span>.settings.lazyLoadOn === <span class="hljs-string">"string"</span> ) {
+        <span class="hljs-keyword">this</span>.$el.on( <span class="hljs-keyword">this</span>.settings.lazyLoadOn, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+          fetchPlayer.call( self );
+        });
+      } <span class="hljs-keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>…otherwise we do that immediately</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        fetchPlayer.call( <span class="hljs-keyword">this</span> );
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <h2 id="getplayer-">getPlayer()</h2>
+<p>Used to retrieve the player script from Ooyala. Returns a promise object
+representing the ajax call being made to get the player script.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getPlayer: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+      <span class="hljs-keyword">var</span> scriptUrl = <span class="hljs-string">"//player.ooyala.com/v3/"</span> + <span class="hljs-keyword">this</span>.settings.playerId,
+          urlParams = <span class="hljs-keyword">this</span>.settings.urlParams;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>We want to give priority to <code>urlParams.platform</code> if it’s passed in, so we
+only look at <code>favorHtml5</code> if we don’t see the user specifying an exact platform.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> ( !urlParams.platform ) {
+        urlParams.platform = <span class="hljs-keyword">this</span>.settings.favorHtml5 ? <span class="hljs-string">"html5-priority"</span> : <span class="hljs-string">"flash"</span>;
+      }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Namespace should always be set by us</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      urlParams.namespace = <span class="hljs-keyword">this</span>._ooNamespace;
+
+      <span class="hljs-keyword">return</span> $.ajax({
+        dataType: <span class="hljs-string">"script"</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>prevent multiple network calls for the same player by caching ones that are
+identical</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        cache: <span class="hljs-literal">true</span>,
+        url: scriptUrl + <span class="hljs-string">"?"</span> + $.param(urlParams)
+      });
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <h2 id="loadcontent-">loadContent()</h2>
+<p>Used to load content represented by <code>contentId</code> into the current player. Essentially
+a convenience method for switching between different content.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    loadContent: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">( contentId )</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Here we ensure that settings.contentId is always up-to-date with what the
+underlying player is currently playing, since the trigger logic uses contentId
+comparisons to determine behaviour.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">this</span>.settings.contentId = contentId;
+      <span class="hljs-keyword">this</span>._player.setEmbedCode( contentId );
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p><code>play()</code>, <code>pause()</code>, <code>seek()</code>, and <code>skipAd()</code> are all methods that simply proxy
+to the underlying Ooyala player. They take the same arguments and return the same
+results.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    play: createProxy( <span class="hljs-string">"play"</span> ),
+
+    pause: createProxy( <span class="hljs-string">"pause"</span> ),
+
+    seek: createProxy( <span class="hljs-string">"seek"</span> ),
+
+    skipAd: createProxy( <span class="hljs-string">"skipAd"</span> )
+  };
+
+  OoyalaWrapper.initialize = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>Find all elements with class oo-player and initializes the plugin on
+each of those elements.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    $( <span class="hljs-string">".oo-player"</span> ).each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+      <span class="hljs-keyword">var</span> $<span class="hljs-keyword">this</span> = $( <span class="hljs-keyword">this</span> ),
+          options = $<span class="hljs-keyword">this</span>.data();
+
+      $<span class="hljs-keyword">this</span>.ooyala( options );
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>Find all triggers for a certain player, and bind triggering logic
+for each.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    $( <span class="hljs-string">"[data-oo-player-trigger]"</span> ).each( bindPlayerTrigger );
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>Allow initialize() to be triggered via an event on the document.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  $( document ).on( <span class="hljs-string">"jquery.ooyala.initialize"</span>, OoyalaWrapper.initialize );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>When the script loads, and the data-auto-init attr on the tag is not
+set to a falsy value, we automagically call $( el ).ooyala(), where
+el represents the NodeList of all elements with class “oo-player”.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  $(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+    <span class="hljs-keyword">var</span> $pluginTag = $( <span class="hljs-string">"script[data-auto-init]"</span> );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Initial check for the attribute is done here because we want to
+auto-initialize by default if data-auto-init is omitted completely.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ( !$pluginTag.length ||
+         $pluginTag.data( <span class="hljs-string">"autoInit"</span> ) ) {
+      OoyalaWrapper.initialize();
+    }
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>A really lightweight plugin wrapper around the constructor,
+preventing against multiple instantiations</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  $.fn[ pluginName ] = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">( options )</span> {</span>
+    <span class="hljs-keyword">this</span>.each(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+      <span class="hljs-keyword">if</span> ( !$.data( <span class="hljs-keyword">this</span>, pluginName ) ) {
+        $.data( <span class="hljs-keyword">this</span>, pluginName, <span class="hljs-keyword">new</span> OoyalaWrapper( <span class="hljs-keyword">this</span>, options ) );
+      }
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>chain jQuery functions</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+  };
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchPlayer</span><span class="hljs-params">()</span> {</span>
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
+
+    self.getPlayer()
+        .done(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+          initOO.call(self);
+        })
+        .fail(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+          <span class="hljs-keyword">var</span> err = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>( <span class="hljs-string">"Could not retrieve player with id "</span> + self.settings.playerId );
+          self.$el
+          .removeClass( <span class="hljs-string">"oo-player-loading"</span> )
+          .addClass( <span class="hljs-string">"oo-player-error"</span> )
+          .trigger( <span class="hljs-string">"ooyala.error"</span>, [ err ] );
+        });
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initOO</span><span class="hljs-params">()</span> {</span>
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>, OO = window[ self._ooNamespace ];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>We don’t want to do <em>anything</em> player related until Ooyala lets us know
+that it’s ready</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    OO.ready(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+      <span class="hljs-keyword">var</span> domId = self.$el.find( <span class="hljs-string">".oo-player-video-container"</span> ).attr( <span class="hljs-string">"id"</span> ),
+          contentId = self.settings.contentId;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>If consumers do pass in onCreate as part of <code>playerParams</code>, we want to
+let them know we’re disregarding this so we can save them having to source-dive,
+or re-read the dox, etc. Note on older browsers console.debug may not be available
+(or console altogether for that matter) so we need to check and make sure we
+our well-intentioned debug message won’t cause the script to die :)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> ( self.settings.playerParams.onCreate &amp;&amp;
+           isObject( console ) &amp;&amp; <span class="hljs-keyword">typeof</span> console.debug === <span class="hljs-string">"function"</span> ) {
+        console.debug(
+          <span class="hljs-string">"($.ooyala) ignoring onCreate playerParam. Use .on('ooyala.ready') "</span> +
+          <span class="hljs-string">"to gain access to the player and the OO object"</span>
+        );
+      }
+
+      self.settings.playerParams.onCreate = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">( player )</span> {</span>
+        initPlayer.call( self, player, OO );
+      };
+
+      OO.Player.create( domId, contentId, self.settings.playerParams );
+    });
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initDOM</span><span class="hljs-params">()</span> {</span>
+    <span class="hljs-keyword">var</span> playerPlacement = <span class="hljs-keyword">this</span>.settings.playerPlacement,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>This is the DOM element that we’ll reference in OO.Player.create(), so we
+give it a unique id.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        $videoContainer = $(
+          <span class="hljs-string">"&lt;div id='video_"</span> + <span class="hljs-keyword">this</span>.settings.contentId + <span class="hljs-string">"' class='oo-player-video-container'&gt;&lt;/div&gt;"</span>
+        );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>There seems to be a bug in istanbul where it can’t handle multiple
+<code>else if</code> statements, so we’re going to ignore this block. :(</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    <span class="hljs-comment">/* istanbul ignore next */</span>
+    <span class="hljs-keyword">if</span> ( playerPlacement === <span class="hljs-string">"append"</span> ) {
+      <span class="hljs-keyword">this</span>.$el.append( $videoContainer );
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( playerPlacement === <span class="hljs-string">"prepend"</span> ) {
+      <span class="hljs-keyword">this</span>.$el.prepend( $videoContainer );
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> playerPlacement === <span class="hljs-string">"function"</span> ) {
+      playerPlacement.call( <span class="hljs-keyword">this</span>.$el, $videoContainer );
+    }
+
+    <span class="hljs-keyword">this</span>.$el.addClass( <span class="hljs-string">"oo-player oo-player-loading"</span> );
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initPlayer</span><span class="hljs-params">( player, OO )</span> {</span>
+    <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>,
+        proxyEventHandler;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>Takes an event key and returns a function that triggers the
+“ooyala.event.<evtKey>“, passing along the arguments given
+from that event.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    proxyEventHandler = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">( evtKey )</span> {</span>
+      <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+        <span class="hljs-keyword">var</span> args = [].slice.call(<span class="hljs-built_in">arguments</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>Get rid of the name that gets sent as the first argument to each callback
+by Ooyala.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        args.shift();
+        self.$el.trigger( <span class="hljs-string">"ooyala.event."</span> + evtKey, args );
+      };
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>Ensure that we proxy every event that the Ooyala player may fire by enumerating
+through the keys on the Ooyala object, subscribing to that event, and invoking
+our proxy event handler when that event is published.</p>
+<p>We also use these events to keep our player’s css updated with the player state.
+We found this to be more reliable than simply manually updating the css.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    objEach( OO.EVENTS, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">( evt, evtKey )</span> {</span>
+      <span class="hljs-keyword">if</span> ( <span class="hljs-keyword">typeof</span> cssEventHooks[ evtKey ] === <span class="hljs-string">"string"</span> ) {
+        player.mb.subscribe( evt, <span class="hljs-string">"oo-player"</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+          removeAllStateClasses.call( self );
+          self.$el.addClass( cssEventHooks[ evtKey ] );
+        });
+      }
+
+      player.mb.subscribe( evt, <span class="hljs-string">"oo-player"</span>, proxyEventHandler( evtKey ) );
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>The player is now completely set up, so we assign it to the <code>_player</code>
+property and inform interested parties that we’re good to go.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>._player = player;
+    <span class="hljs-keyword">this</span>.$el.trigger( <span class="hljs-string">"ooyala.ready"</span>, [ <span class="hljs-keyword">this</span>._player, OO ] );
+  }
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeAllStateClasses</span><span class="hljs-params">()</span> {</span>
+    <span class="hljs-keyword">this</span>.$el.removeClass(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">( idx, classNames )</span> {</span>
+      <span class="hljs-keyword">return</span> ( classNames.match( <span class="hljs-regexp">/\boo-player-\S+/g</span> ) || [] ).join( <span class="hljs-string">" "</span> );
+    });
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p><code>bindPlayerTrigger</code> takes care of all logic around finding DOM elements
+that should act as triggers, and making them behave as such.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bindPlayerTrigger</span><span class="hljs-params">()</span> {</span>
+    <span class="hljs-keyword">var</span> $<span class="hljs-keyword">this</span> = $( <span class="hljs-keyword">this</span> ),
+        defaults = { event: <span class="hljs-string">"click"</span>, seek: <span class="hljs-number">0</span> },
+        options = $.extend( defaults, $<span class="hljs-keyword">this</span>.data().ooPlayerTrigger ),
+        ooPlayer;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>Like $.fn.ooyala(), we need a domId and contentId in order for this
+to work properly. <em>Unlike</em> $.fn.ooyala(), we simply fail silently if
+they’re not found. HTML elements are easy enough to inspect.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ( options.domId &amp;&amp; options.contentId ) {
+      ooPlayer = $( document.getElementById(options.domId) ).data( <span class="hljs-string">"ooyala"</span> );
+
+      $<span class="hljs-keyword">this</span>.on( options.event, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <p>Seek if contentId is the same, swap the content otherwise</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> ( options.contentId === ooPlayer.settings.contentId ) {
+          ooPlayer.seek( options.seek );
+        } <span class="hljs-keyword">else</span> {
+          ooPlayer.loadContent( options.contentId );
+        }
+      });
+    }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p>Used to create method proxies for the underlying ooyala player.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createProxy</span><span class="hljs-params">( methodName )</span> {</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+      <span class="hljs-keyword">var</span> player = <span class="hljs-keyword">this</span>.$el.data( <span class="hljs-string">"ooyala"</span> )._player,
+          args = [].slice.call(<span class="hljs-built_in">arguments</span>);
+
+      <span class="hljs-keyword">return</span> player[ methodName ].apply(player, args);
+    };
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <p>We need this for the unfortunate <code>typeof null === &quot;object&quot;</code> nonsense :(</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isObject</span><span class="hljs-params">( x )</span> {</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> x === <span class="hljs-string">"object"</span> &amp;&amp; x !== <span class="hljs-literal">null</span>;
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-44">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-44">&#182;</a>
+              </div>
+              <p>Safe enumeration through an object, similar to
+ES5’s <code>Array.prototype.forEach</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">objEach</span><span class="hljs-params">( obj, iterator, context )</span> {</span>
+    <span class="hljs-keyword">var</span> hasOwn = <span class="hljs-built_in">Object</span>.prototype.hasOwnProperty, key;
+
+    <span class="hljs-keyword">for</span> ( key <span class="hljs-keyword">in</span> obj ) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-45">&#182;</a>
+              </div>
+              <p>Not even going to worry about covering this if statement</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-comment">/* istanbul ignore next */</span>
+      <span class="hljs-keyword">if</span> ( hasOwn.call( obj, key ) ) {
+        iterator.call( context, obj[ key ], key, obj );
+      }
+    }
+  }
+})( jQuery, window, document );</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

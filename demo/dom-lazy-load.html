@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>jquery.ooyala - Switching between Videos (Javascript)</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+      #element, #buttons {
+        max-width: 100%;
+        width: 600px;
+        margin: 0 auto;
+      }
+
+      #element {
+        height: 400px;
+        padding-bottom: 1em;
+        cursor: pointer;
+        border: 1px solid #ccc;
+      }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="../src/jquery.ooyala.js"></script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6">
+          <h2>Output</h2>
+          <div id="element" class="oo-player"
+               data-player-id="e18ab1da1813483499554ea2d8e67fbd"
+               data-content-id="M0dTZ0bTqdn5iPEJDDcK87Gq5tfBL8wO"
+               data-lazy-load-on="click">Click me to load the player</div>
+        </div>
+
+        <div class="col-md-6">
+          <h2>Markup</h2>
+          <pre><code>
+            &lt;div id="element" class="oo-player"
+                 data-player-id="e18ab1da1813483499554ea2d8e67fbd"
+                 data-content-id="M0dTZ0bTqdn5iPEJDDcK87Gq5tfBL8wO"
+                 data-lazy-load-on="click"&gt;Click me to load the player&lt;/div&gt;
+          </code></pre>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

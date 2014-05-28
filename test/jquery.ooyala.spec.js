@@ -470,6 +470,10 @@ describe( "jquery.ooyala", function() {
         this.$el.trigger( this.evt );
         expect( $.ajax ).toHaveBeenCalled();
       });
+
+      it( "does not add oo-player-loading to the element", function() {
+        expect( this.$el ).not.toHaveClass( "oo-player-loading" );
+      });
     });
   });
 

@@ -207,6 +207,7 @@
   function fetchPlayer() {
     var self = this;
 
+    self.$el.addClass( "oo-player oo-player-loading" );
     self.getPlayer()
         .done(function() {
           initOO.call(self);
@@ -270,7 +271,6 @@
       playerPlacement.call( this.$el, $videoContainer );
     }
 
-    this.$el.addClass( "oo-player oo-player-loading" );
   }
 
   function initPlayer( player, OO ) {

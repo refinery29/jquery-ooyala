@@ -26,6 +26,33 @@ jQuery-Ooyala provides a dead-simple interface for creating and working with [Oo
 
 Built by your friends on the [Refinery29 Mobile Web Team](http://r29mobile.tumblr.com/)
 
+## Table of Contents
+*generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Installation](#user-content-installation)
+- [Basic Usage](#user-content-basic-usage)
+	- [Initializing the player](#user-content-initializing-the-player)
+	- [Lazy loading](#user-content-lazy-loading)
+	- [Using the Flash-based player](#user-content-using-the-flash-based-player)
+	- [Customizing player placement within an element](#user-content-customizing-player-placement-within-an-element)
+	- [CSS Hooks](#user-content-css-hooks)
+- [Advanced Usage](#user-content-advanced-usage)
+	- [Subscribing to player events](#user-content-subscribing-to-player-events)
+	- [Using Additional Elements to Load / Seek Within Videos](#user-content-using-additional-elements-to-load--seek-within-videos)
+	- [Custom script tag / player params](#user-content-custom-script-tag--player-params)
+	- [Directly accessing the Ooyala global object and player](#user-content-directly-accessing-the-ooyala-global-object-and-player)
+	- [Controlling auto-initialization](#user-content-controlling-auto-initialization)
+	- [Accessing the plugin constructor directly](#user-content-accessing-the-plugin-constructor-directly)
+- [Plugin Javascript API](#user-content-plugin-javascript-api)
+	- [OoyalaWrapper](#user-content-ooyalawrapper)
+		- [Public Properties](#user-content-public-properties)
+		- [Methods](#user-content-methods)
+		- [Ooyala Player method proxies.](#user-content-ooyala-player-method-proxies)
+- [Full List of Options](#user-content-full-list-of-options)
+- [Running Demos](#user-content-running-demos)
+- [FAQ/Troubleshotting](#user-content-faqtroubleshotting)
+- [License](#user-content-license)
+
 ## Installation
 
 You can install jquery-ooyala using either [bower](http://bower.io/)

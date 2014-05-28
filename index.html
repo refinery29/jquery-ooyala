@@ -583,6 +583,7 @@ preventing against multiple instantiations</p>
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchPlayer</span><span class="hljs-params">()</span> {</span>
     <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;
 
+    self.$el.addClass( <span class="hljs-string">"oo-player oo-player-loading"</span> );
     self.getPlayer()
         .done(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
           initOO.call(self);
@@ -695,7 +696,6 @@ give it a unique id.</p>
       playerPlacement.call( <span class="hljs-keyword">this</span>.$el, $videoContainer );
     }
 
-    <span class="hljs-keyword">this</span>.$el.addClass( <span class="hljs-string">"oo-player oo-player-loading"</span> );
   }
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">initPlayer</span><span class="hljs-params">( player, OO )</span> {</span>

@@ -1,7 +1,7 @@
 {
   "name": "jquery-ooyala",
   "description": "An easy-to-use, extensible jQuery wrapper around Ooyala's Javascript Player",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "homepage": "http://jqueryboilerplate.com",
   "authors": [
     "Refinery29, Inc. <dev@refinery29.com>"

@@ -3,6 +3,10 @@
   "description": "An easy-to-use, extensible jQuery wrapper around Ooyala's Javascript Player",
   "version": "0.1.0",
   "homepage": "http://jqueryboilerplate.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/refinery29/jquery-ooyala.git"
+  },
   "authors": [
     "Refinery29, Inc. <dev@refinery29.com>"
   ],
@@ -29,7 +33,7 @@
     "ooyala.jquery.json"
   ],
   "devDependencies": {
-		"jquery": "~2.0.0",
+    "jquery": "~2.0.0",
     "jasmine-jquery": "~2.0.3"
   },
   "license": "MIT"

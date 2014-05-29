@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>jquery.ooyala - Lazy Loading the Player (Javascript)</title>
+    <title>jquery.ooyala - Custom Player Placement (Javascript)</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
@@ -14,8 +14,6 @@
       #element {
         height: 400px;
         padding-bottom: 1em;
-        cursor: pointer;
-        border: 1px solid #ccc;
       }
     </style>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
@@ -26,16 +24,21 @@
       <div class="row">
         <div class="col-md-6">
           <h2>Output</h2>
-          <div id="element" class="oo-player">Click me to load the player</div>
+          <div id="element">
+            <p>This text comes before the player</p>
+            <p>This text comes after the player</p>
+          </div>
         </div>
 
         <div class="col-md-6">
           <h2>Code</h2>
           <pre><code>
             $( "#element" ).ooyala({
-              playerId: "e18ab1da1813483499554ea2d8e67fbd",
-              contentId: "M0dTZ0bTqdn5iPEJDDcK87Gq5tfBL8wO",
-              lazyLoadOn: "click"
+                playerId: "e18ab1da1813483499554ea2d8e67fbd",
+                contentId: "M0dTZ0bTqdn5iPEJDDcK87Gq5tfBL8wO",
+                playerPlacement: function( $videoContainer ) {
+                  this.find( "p:first-child" ).insertAfter( $videoContainer );
+                }
             });
           </code></pre>
         </div>
@@ -43,9 +46,11 @@
     </div>
     <script>
       $( "#element" ).ooyala({
-        playerId: "e18ab1da1813483499554ea2d8e67fbd",
-        contentId: "M0dTZ0bTqdn5iPEJDDcK87Gq5tfBL8wO",
-        lazyLoadOn: "click"
+          playerId: "e18ab1da1813483499554ea2d8e67fbd",
+          contentId: "M0dTZ0bTqdn5iPEJDDcK87Gq5tfBL8wO",
+          playerPlacement: function( $videoContainer ) {
+            this.find( "p:first-child" ).after( $videoContainer );
+          }
       });
     </script>
   </body>

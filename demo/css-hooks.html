@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>jquery.ooyala - Using CSS Hooks</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+      #element {
+        max-width: 100%;
+        width: 600px;
+        height: 400px;
+        margin: 0 auto;
+        padding-bottom: 1em;
+      }
+
+      .status {
+        font-size: 2em;
+        visibility: hidden;
+      }
+
+      .oo-player-loading #status-loading {
+        color: #f0ad4e;
+        visibility: visible;
+      }
+
+      .oo-player-ready #status-ready {
+        color: #5bc0de;
+        visibility: visible;
+      }
+
+      .oo-player-playing #status-playing {
+        color: #5cb85c;
+        visibility: visible;
+      }
+
+      .oo-player-paused #status-paused {
+        color: #428bca;
+        visibility: visible;
+      }
+
+      .oo-player-error #status-error {
+        color: #d9534f;
+        visibility: visible;
+      }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="../src/jquery.ooyala.js"></script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6">
+          <h2>Output</h2>
+          <div id="element"
+               class="oo-player"
+               data-player-id="e18ab1da1813483499554ea2d8e67fbd"
+               data-content-id="M0dTZ0bTqdn5iPEJDDcK87Gq5tfBL8wO"
+               >
+            <p>Status:</p>
+            <div class="container-fluid">
+              <p class="status col-md-2" id="status-loading">Loading</p>
+              <p class="status col-md-2" id="status-ready">Ready</p>
+              <p class="status col-md-2" id="status-playing">Playing</p>
+              <p class="status col-md-2" id="status-paused">Paused</p>
+              <p class="status col-md-2" id="status-error">Error</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div>
+            <h2>Markup</h2>
+            <pre><code>
+            &lt;div id="element"
+                 class="oo-player"
+                 data-player-id="e18ab1da1813483499554ea2d8e67fbd"
+                 data-content-id="M0dTZ0bTqdn5iPEJDDcK87Gq5tfBL8wO"
+                 &gt;
+              &lt;p&gt;Status:&lt;/p&gt;
+              &lt;div class="container-fluid"&gt;
+                &lt;p class="status col-md-2" id="status-loading"&gt;Loading&lt;/p&gt;
+                &lt;p class="status col-md-2" id="status-ready"&gt;Ready&lt;/p&gt;
+                &lt;p class="status col-md-2" id="status-playing"&gt;Playing&lt;/p&gt;
+                &lt;p class="status col-md-2" id="status-paused"&gt;Paused&lt;/p&gt;
+                &lt;p class="status col-md-2" id="status-error"&gt;Error&lt;/p&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            </code></pre>
+          </div>
+          <div>
+            <h2>CSS</h2>
+            <pre><code>
+            .status {
+              font-size: 2em;
+              visibility: hidden;
+            }
+
+            .oo-player-loading #status-loading {
+              color: #f0ad4e;
+              visibility: visible;
+            }
+
+            .oo-player-ready #status-ready {
+              color: #5bc0de;
+              visibility: visible;
+            }
+
+            .oo-player-playing #status-playing {
+              color: #5cb85c;
+              visibility: visible;
+            }
+
+            .oo-player-paused #status-paused {
+              color: #428bca;
+              visibility: visible;
+            }
+
+            .oo-player-error #status-error {
+              color: #d9534f;
+              visibility: visible;
+            }
+            </code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

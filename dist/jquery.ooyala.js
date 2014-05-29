@@ -90,7 +90,7 @@
 
       // Ooyala's v3 Player requires both a player id and a content id to function properly.
       // If we're missing any of these properties, we won't be able to do anything, so let's
-      // error out and immediately inform the cosumer that she has made a mistake by omitting
+      // error out and immediately inform the consumer that she has made a mistake by omitting
       // these properties.
       if ( !this.settings.playerId ) {
         throw new Error( "You must provide a playerId to $.fn.ooyala()" );

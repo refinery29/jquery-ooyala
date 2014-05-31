@@ -7,6 +7,6 @@
   "dependencies": {},
   "development": {},
   "license": "MIT",
-  "main": "src/jquery.ooyala.js",
-  "scripts": [ "src/jquery.ooyala.js" ]
+  "main": "dist/jquery.ooyala.js",
+  "scripts": [ "dist/jquery.ooyala.js" ]
 }

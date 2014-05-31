@@ -62,6 +62,12 @@ You can install jquery-ooyala using either [bower](http://bower.io/)
 $ bower install jquery-ooyala
 ```
 
+or [component](https://github.com/component/component)
+
+```sh
+$ component install refinery29/jquery-ooyala
+```
+
 or npm
 
 ```sh

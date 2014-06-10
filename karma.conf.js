@@ -18,7 +18,7 @@ module.exports = function(config) {
     files: [
       // 3rd-party libs
       "bower_components/jquery/jquery.js",
-      "bower_components/jasmine-jquery/jasmine-jquery.js",
+      "bower_components/jasmine-jquery/lib/jasmine-jquery.js",
       // source files
       "src/**/*.js",
       // fixtures/helpers

@@ -499,59 +499,6 @@ for each.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
-              <p>Allow initialize() to be triggered via an event on the document.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  $( document ).on( <span class="hljs-string">"jquery.ooyala.initialize"</span>, OoyalaWrapper.initialize );</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-27">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
-              </div>
-              <p>When the script loads, and the data-auto-init attr on the tag is not
-set to a falsy value, we automagically call $( el ).ooyala(), where
-el represents the NodeList of all elements with class “oo-player”.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  $(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
-    <span class="hljs-keyword">var</span> $pluginTag = $( <span class="hljs-string">"script[data-auto-init]"</span> );</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-28">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
-              </div>
-              <p>Initial check for the attribute is done here because we want to
-auto-initialize by default if data-auto-init is omitted completely.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ( !$pluginTag.length ||
-         $pluginTag.data( <span class="hljs-string">"autoInit"</span> ) ) {
-      OoyalaWrapper.initialize();
-    }
-  });</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-29">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
-              </div>
               <p>A really lightweight plugin wrapper around the constructor,
 preventing against multiple instantiations</p>
 
@@ -567,18 +514,71 @@ preventing against multiple instantiations</p>
         </li>
         
         
-        <li id="section-30">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>chain jQuery functions</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
-  };
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Allow initialize() to be triggered via an event on the document.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  $( document ).on( <span class="hljs-string">"jquery.ooyala.initialize"</span>, OoyalaWrapper.initialize );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>When the script loads, and the data-auto-init attr on the tag is not
+set to a falsy value, we automagically call $( el ).ooyala(), where
+el represents the NodeList of all elements with class “oo-player”.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  $(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+    <span class="hljs-keyword">var</span> $pluginTag = $( <span class="hljs-string">"script[data-auto-init]"</span> );</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>Initial check for the attribute is done here because we want to
+auto-initialize by default if data-auto-init is omitted completely.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> ( !$pluginTag.length ||
+         $pluginTag.data( <span class="hljs-string">"autoInit"</span> ) ) {
+      OoyalaWrapper.initialize();
+    }
+  });
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fetchPlayer</span><span class="hljs-params">()</span> {</span>
     <span class="hljs-keyword">var</span> self = <span class="hljs-keyword">this</span>;

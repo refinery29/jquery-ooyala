@@ -182,6 +182,19 @@
     $( "[data-oo-player-trigger]" ).each( bindPlayerTrigger );
   };
 
+  // A really lightweight plugin wrapper around the constructor,
+  // preventing against multiple instantiations
+  $.fn[ pluginName ] = function ( options ) {
+    this.each(function() {
+      if ( !$.data( this, pluginName ) ) {
+        $.data( this, pluginName, new OoyalaWrapper( this, options ) );
+      }
+    });
+
+    // chain jQuery functions
+    return this;
+  };
+
   // Allow initialize() to be triggered via an event on the document.
   $( document ).on( "jquery.ooyala.initialize", OoyalaWrapper.initialize );
 
@@ -198,19 +211,6 @@
       OoyalaWrapper.initialize();
     }
   });
-
-  // A really lightweight plugin wrapper around the constructor,
-  // preventing against multiple instantiations
-  $.fn[ pluginName ] = function ( options ) {
-    this.each(function() {
-      if ( !$.data( this, pluginName ) ) {
-        $.data( this, pluginName, new OoyalaWrapper( this, options ) );
-      }
-    });
-
-    // chain jQuery functions
-    return this;
-  };
 
   function fetchPlayer() {
     var self = this;

@@ -1,5 +1,5 @@
 /*
- *  jQuery Ooyala - v0.1.0
+ *  jQuery Ooyala - v0.1.1
  *  An easy-to-use, extensible wrapper around Ooyala's Player Javascript API
  *  https://github.com/refinery29/jquery-ooyala
  *

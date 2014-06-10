@@ -1,7 +1,7 @@
 {
   "name": "jquery-ooyala",
   "description": "An easy-to-use, extensible jQuery wrapper around Ooyala's Javascript Player",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/jquery.ooyala.js",
   "repository": {
     "type": "git",

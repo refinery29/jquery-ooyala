@@ -55,13 +55,9 @@ module.exports = function(grunt) {
       }
     },
 
-    bower: {
-      install: {
-        options: {
-          targetDir: 'bower_components',
-          layout: 'byComponent',
-          verbose: true
-        }
+    shell: {
+      bower: {
+        command: './node_modules/.bin/bower install'
       }
     },
 
@@ -107,11 +103,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-concat");
   grunt.loadNpmTasks("grunt-contrib-jshint");
   grunt.loadNpmTasks("grunt-contrib-uglify");
-  grunt.loadNpmTasks("grunt-bower-task");
   grunt.loadNpmTasks("grunt-karma");
   grunt.loadNpmTasks("grunt-istanbul-coverage");
   grunt.loadNpmTasks("grunt-docco");
+  grunt.loadNpmTasks("grunt-shell");
 
-  grunt.registerTask("test", ["bower:install", "jshint", "karma:ci", "coverage"]);
+  grunt.registerTask("test", ["shell:bower", "jshint", "karma:ci", "coverage"]);
   grunt.registerTask("dist", ["test", "concat", "uglify", "docco"]);
 };

@@ -62,7 +62,9 @@
           STREAM_PAUSED: "streampaused",
           STREAM_PLAYING: "streamplaying",
           STREAM_PLAY_FAILED: "streamplayfailed",
-          WILL_PLAY: "willplay"
+          WILL_PLAY: "willplay",
+          WILL_PAUSE_ADS: "willpauseads",
+          WILL_PLAY_ADS: "willplayads"
         },
         ready: function( fn ) { fn(); }
       };

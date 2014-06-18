@@ -425,6 +425,8 @@ describe( "jquery.ooyala", function() {
     shouldAddClassForEvent( "STREAM_PAUSED", "oo-player-paused" );
     shouldAddClassForEvent( "STREAM_PLAYING", "oo-player-playing" );
     shouldAddClassForEvent( "STREAM_PLAY_FAILED", "oo-player-error" );
+    shouldAddClassForEvent( "WILL_PAUSE_ADS", "oo-player-paused" );
+    shouldAddClassForEvent( "WILL_PLAY_ADS", "oo-player-playing" );
 
     describe( "even when there are no state classes on the element", function() {
       beforeEach(function() {
@@ -439,6 +441,8 @@ describe( "jquery.ooyala", function() {
       shouldAddClassForEvent( "STREAM_PAUSED", "oo-player-paused" );
       shouldAddClassForEvent( "STREAM_PLAYING", "oo-player-playing" );
       shouldAddClassForEvent( "STREAM_PLAY_FAILED", "oo-player-error" );
+      shouldAddClassForEvent( "WILL_PAUSE_ADS", "oo-player-paused" );
+      shouldAddClassForEvent( "WILL_PLAY_ADS", "oo-player-playing" );
     });
 
     function shouldAddClassForEvent( evtName, className ) {

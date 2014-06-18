@@ -56,7 +56,9 @@
         PLAY_FAILED: "oo-player-error",
         STREAM_PAUSED: "oo-player-paused",
         STREAM_PLAYING: "oo-player-playing",
-        STREAM_PLAY_FAILED: "oo-player-error"
+        STREAM_PLAY_FAILED: "oo-player-error",
+        WILL_PAUSE_ADS: "oo-player-paused",
+        WILL_PLAY_ADS: "oo-player-playing"
       };
 
   // The actual plugin constructor. Wraps all logic around fetching Ooyala's javascript,

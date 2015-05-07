@@ -17,6 +17,13 @@ describe( "jquery.ooyala", function() {
       return this.$el.ooyala.apply(this.$el, args);
     };
 
+    this.initWorld = function() {
+      var ooyala;
+      this.$el.ooyala( this.options );
+      ooyala = this.$el.data( "ooyala" );
+      this.fauxO( ooyala._ooNamespace );
+    };
+
     this.let_( "$oo", this.initPlugin.bind(this) );
 
     spyOn( $, "ajax" ).and.callFake(function() {
@@ -24,12 +31,9 @@ describe( "jquery.ooyala", function() {
       return this.deferred.promise();
     }.bind(this) );
 
-    this.initWorld = function() {
-      var ooyala;
-      this.$el.ooyala( this.options );
-      ooyala = this.$el.data( "ooyala" );
-      this.fauxO( ooyala._ooNamespace );
-    };
+    spyOn(Date, "now").and.callFake(function() {
+      return 666;
+    });
   });
 
   describe( "initialization", function() {
@@ -111,8 +115,8 @@ describe( "jquery.ooyala", function() {
           expect( this.$oo.children().last() ).toHaveClass( "oo-player-video-container" );
         });
 
-        it( "assigns an id of 'video_<contentId>' to the element", function() {
-          expect( this.$oo.find( ".oo-player-video-container" ) ).toHaveAttr( "id", "video_" + this.options.contentId );
+        it( "assigns an id of 'video_<contentId><Date.now()>' to the element", function() {
+          expect( this.$oo.find( ".oo-player-video-container" ) ).toHaveAttr( "id", "video_" + this.options.contentId + "666");
         });
 
         describe( "when options.playerPlacement = 'append'", function() {

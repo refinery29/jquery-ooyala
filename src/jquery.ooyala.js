@@ -256,9 +256,9 @@
   function initDOM() {
     var playerPlacement = this.settings.playerPlacement,
         // This is the DOM element that we'll reference in OO.Player.create(), so we
-        // give it a unique id.
+        // give it a truly unique identifier within the DOM.
         $videoContainer = $(
-          "<div id='video_" + this.settings.contentId + "' class='oo-player-video-container'></div>"
+          "<div id='video_" + this.settings.contentId + Date.now() + "' class='oo-player-video-container'></div>"
         );
 
     // There seems to be a bug in istanbul where it can't handle multiple

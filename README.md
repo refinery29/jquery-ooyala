@@ -1,7 +1,8 @@
 jquery-ooyala
 =============
+
 [![Build Status](https://travis-ci.org/refinery29/jquery-ooyala.svg?branch=master)](https://travis-ci.org/refinery29/jquery-ooyala)
-[![Code Climate](https://codeclimate.com/github/refinery29/jquery-ooyala.png)](https://codeclimate.com/github/refinery29/jquery-ooyala)
+[![Code Climate](https://codeclimate.com/repos/538e3126e30ba0468d00576d/badges/a74eef70d7747810abdc/gpa.svg)](https://codeclimate.com/repos/538e3126e30ba0468d00576d/feed)
 
 jQuery-Ooyala provides a dead-simple interface for creating and working with [Ooyala's V3 Javascript Player](http://support.ooyala.com/developers/documentation/concepts/player_v3_api_intro.html). It is:
 

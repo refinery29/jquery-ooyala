@@ -121,7 +121,7 @@
       // We want to give priority to `urlParams.platform` if it's passed in, so we
       // only look at `favorHtml5` if we don't see the user specifying an exact platform.
       if ( !urlParams.platform ) {
-        urlParams.platform = this.settings.favorHtml5 ? "html5-priority" : "flash";
+        urlParams.platform = this.settings.favorHtml5 ? "html5-priority" : "html5-fallback";
       }
 
       // Namespace should always be set by us

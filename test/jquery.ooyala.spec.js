@@ -509,8 +509,8 @@ describe( "jquery.ooyala", function() {
         this.initWorld();
       });
 
-      it( "uses platform=flash instead of platform=html5-priority", function() {
-        expect( $.ajax.calls.mostRecent().args[0].url ).toContain( "platform=flash" );
+      it( "uses platform=html5-fallback instead of platform=html5-priority", function() {
+        expect( $.ajax.calls.mostRecent().args[0].url ).toContain( "platform=html5-fallback" );
       });
     });
 
